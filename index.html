@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>மாணவர் வருகைப்பதிவு (Cloud App)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], select, input[type="date"] { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+    </style>
+
+    <!-- Firebase SDK வரிகள் -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>மாணவர் வருகைப்பதிவு செயலி (Cloud App)</h2>
+    
+    <div class="form-group">
+        <label>மாணவர் பெயர் (Student Name):</label>
+        <input type="text" id="studentName" placeholder="பெயரை டைப் செய்யவும்">
+    </div>
+
+    <div class="form-group">
+        <label>ரோல் எண் (Roll Number):</label>
+        <input type="text" id="rollNo" placeholder="ரோல் எண்">
+    </div>
+
+    <div class="form-group">
+        <label>தேதி (Date):</label>
+        <input type="date" id="attendanceDate">
+    </div>
+
+    <div class="form-group">
+        <label>வருகை நிலை (Status):</label>
+        <select id="status">
+            <option value="Present">Present (வந்துள்ளார்)</option>
+            <option value="Absent">Absent (வரவில்லை)</option>
+        </select>
+    </div>
+
+    <button type="button" onclick="saveAttendance()">வருகையைப் பதிவு செய் (Submit)</button>
+</div>
+
+<script>
+    // உங்கள் ஃபயர்பேஸ் இணைப்புகள் கச்சிதமாகக் கொடுக்கப்பட்டுள்ளது
+    const firebaseConfig = {
+        apiKey: "AIzaSyB2bQ7p7uS9vFGxGQ0j2uMYSCkGMzD8Jrc",
+        authDomain: "://firebaseapp.com",
+        projectId: "studend-attendance",
+        storageBucket: "studend-attendance.firebasestorage.app",
+        messagingSenderId: "1008935728998",
+        appId: "1:1008935728998:web:aae22c6ed5b03cd1bb2a8b",
+        measurementId: "G-Z68379B78R"
+    };
+    
+    // எரர் வராதவாறு db-ஐ முன்கூட்டியே initialize செய்கிறோம்
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+
+    // தேதியைத் தேர்ந்தெடுக்க
+    document.getElementById('attendanceDate').valueAsDate = new Date();
+
+    function saveAttendance() {
+        var name = document.getElementById('studentName').value;
+        var roll = document.getElementById('rollNo').value;
+        var date = document.getElementById('attendanceDate').value;
+        var status = document.getElementById('status').value;
+
+        if(name.trim() === "" || roll.trim() === "") {
+            alert("தயவுசெய்து அனைத்து விவரங்களையும் நிரப்பவும்!");
+            return;
+        }
+
+        // ஆன்லைன் கிளவுடில் சேமிக்க
+        db.collection("attendance").add({
+            studentName: name,
+            rollNo: roll,
+            date: date,
+            status: status
+        })
+        .then(() => {
+            alert("மாணவர் " + name + " அவர்களின் வருகை ஆன்லைன் கிளவுடில் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது!");
+            document.getElementById('studentName').value = "";
+            document.getElementById('rollNo').value = "";
+        })
+        .catch((error) => {
+            alert("கிளவுடில் பதிவு செய்வதில் ஏதோ தவறு நடந்துள்ளது!");
+        });
+    }
+</script>
+
+</body>
+</html>
