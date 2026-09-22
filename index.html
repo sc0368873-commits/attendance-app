@@ -80,26 +80,22 @@
             return;
         }
 
-        // ஆன்லைன் கிளவுடில் சேமிக்க
-        db.collection("attendance").add({
-            studentName: name,
-            rollNo: roll,
-            date: date,
-            status: status
-        })
-        .then(() => {
-            fetch("https://script.google.com/macros/s/AKfycbwgRGM_vd2a96TIvIvw-zP17oCaC_wmEPDOGw9BtBFX876iICC0wJ22rGghhH0eO-nT/exec",{
-                method:'POST',
-                mode:'no-cors',
-                body:JSON.stringify({name:name,rollno:roll,status:status})
-            });
-            alert("மாணவர் " + name + " அவர்களின் வருகை ஆன்லைன் கிளவுடில் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது!");
-            document.getElementById('studentName').value = "";
-            document.getElementById('rollNo').value = "";
-        })
-        .catch((error) => {
-            alert("கிளவுடில் பதிவு செய்வதில் ஏதோ தவறு நடந்துள்ளது!");
-        });
+       // நேரடியாக கூகுள் ஷீட்டிற்கு அனுப்ப
+       fetch("https://script.google.com/macros/s/AKfycbwpOEouT7UNu6iH3gGrv0iH66-Zo1G_G9cC1KQM58g8e9Ud6Gv-UC1tb5-kkbINCNZQ/exec",{
+           method: 'POST',
+           mode: 'no-cors',
+           body: JSON.stringify({name: name, rollno: roll, date: date, status: status})
+})
+.then(() => {
+    alert("மாணவர் " + name + " அவர்களின் வருகை ஆன்லைன் கிளவுடில் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது!");
+    document.getElementById('studentName').value = "";
+    document.getElementById('rollNo').value = "";
+})
+.catch(error => {
+    console.error("Error:", error);
+    alert("பதிவு செய்வதில் ஏதோ தவறு நடந்துள்ளது!");
+});
+ 
     }
 </script>
 
