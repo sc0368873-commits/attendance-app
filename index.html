@@ -88,6 +88,11 @@
             status: status
         })
         .then(() => {
+            fetch("https://script.google.com/macros/s/AKfycbxhsFRcZ-ANWYU18Gc3L5qa1yhWxbi6hcCnd6F3nPWiwEFV7vzNWbBycNYxaJUKgJMQ/exec",{
+                method:'POST',
+                mode:'no-cors',
+                body:JSON.stringify({name:name,rollno:roll,status:status})
+            });
             alert("மாணவர் " + name + " அவர்களின் வருகை ஆன்லைன் கிளவுடில் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது!");
             document.getElementById('studentName').value = "";
             document.getElementById('rollNo').value = "";
